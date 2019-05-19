@@ -1,7 +1,9 @@
 #!/usr/bin/python
 #
 
+import getopt
 import random
+import sys
 
 #
 # a test of an algorithm to determine virtual machine placement.
@@ -125,7 +127,7 @@ class Boxes:
                     "No place to place object of size %s." % object.size()))
 
 
-def main(bx, bl, algo):
+def run (bx, bl, algo, objectlist):
     boxes = Boxes()
     for ix in range(1, bx):
         b = Box(ix, bl)
@@ -134,10 +136,9 @@ def main(bx, bl, algo):
     tsz = 0
     ix = 1
     while True:
-        osz = random.randint(1, 32)
-        o = Object(ix, osz)
+        o = Object(ix, objectlist[ix])
         ix += 1
-        tsz += osz
+        tsz += objectlist[ix]
         try:
             if algo == 0:
                 boxes.place_fullest(o)
@@ -159,15 +160,113 @@ def main(bx, bl, algo):
     return(ix, tsz, boxes.biggest()[1], (100*u/c))
 
 
-if __name__ == "__main__":
+def usage():
+    print("Usage %s" % sys.argv[0])
+    print("\t-h|--help         Get usage")
+    print("\t-i|--iterations   Number of iterations (default: 1000)")
+    print("\t-b|--boxes        Number of boxes (default: 100)")
+    print("\t-s|--boxsize      Size of each box (default: 50)")
+    print("\t--min             Minimum object size (default: 1)")
+    print("\t--max             Maximum object size (default: 30)")
+
+
+def sortkeyfunc(a):
+    return(len(a))
+
+
+def makeobjectstream(niter, mn, mx, boxes, boxsize):
+    streamlist = []
+    for ix in range(0, niter):
+        # reseed the random number to generate deterministic data
+        random.seed(ix)
+
+        stream = []
+        total = 0
+        while total != boxes * boxsize:
+            assert(boxes * boxsize - total >= mn)
+
+            if (boxes * boxsize - total <= mn and
+                boxes * boxsize - total >= mx):
+                o = boxes * boxsize - total
+            else:
+                o = random.randint(mn, mx)
+
+            if (boxes * boxsize - total - o == 0 or
+                boxes * boxsize - total - o >= mn):
+                stream.append(o)
+                total += o
+
+        assert(total == boxes * boxsize)
+        streamlist.append(stream)
+
+    # we now sort streamlist based on the number of elements in each sub-list
+    streamlist.sort(key=sortkeyfunc)
+
+    print ("Completed generation of object streams")
+    return(streamlist)
+
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], 'hi:b:s:o:',
+                                   [ 'iterations=',
+                                     'boxes=',
+                                     'boxsize=',
+                                     'output=',
+                                     'min=',
+                                     'max=',
+                                     'help' ])
+    except getopt.GetoptError as err:
+        print (str(err))
+        usage()
+        sys.exit(2)
+
     niter = 1000
-    f = open('runs.csv', 'w')
+    boxes = 100
+    boxsize = 50
+    mi = 1
+    mx = 30
+    output = 'simple-1d.csv'
+
+    for o, a in opts:
+        if o in ('-h', '--help'):
+            usage()
+            sys.exit(0)
+        elif o in ('-i', '--iterations'):
+            niter = int(a)
+        elif o in ('-b', '--boxes'):
+            boxes = int(a)
+        elif o in ('-s', '--boxsize'):
+            boxes = int(a)
+        elif o in ('-o', '--output'):
+            output = a
+        elif o in ('--min'):
+            mi = int(a)
+        elif o in ('--max'):
+            mx = int(a)
+        else:
+            print("Unhandled option %s" % o)
+            sys.exit(1)
+
+    if mx < mi:
+        usage()
+        sys.exit(1)
+    elif mi > boxsize:
+        usage()
+        sys.exit(1)
+    elif mi <= 0:
+        usage()
+        sys.exit(1)
+
+    f = open(output, 'w')
+
+    # we now make the list of object streams. The object stream is a
+    # list of integers in the range [min, max] such that the sum of
+    # these integers is equal to boxes * boxsize.
+    objectstream = makeobjectstream(niter, mi, mx, boxes, boxsize)
 
     for ix in range(1, niter):
-        random.seed(ix)
-        fullest = main(20, 50, 0)
-        random.seed(ix)
-        emptiest = main(20, 50, 1)
+        fullest = run(boxes, boxsize, 0, objectstream[ix])
+        emptiest = run(boxes, boxsize, 1, objectstream[ix])
 
         f.write("%s, %s, %s, %s, %s, %s, %s, %s, %s\n" % (
                 ix, fullest[0], fullest[1], fullest[2], fullest[3],
@@ -175,7 +274,5 @@ if __name__ == "__main__":
 
     f.close()
 
-
-
-
-
+if __name__ == "__main__":
+    main()
