@@ -1,6 +1,7 @@
 #!/usr/bin/python
 #
 
+from datetime import datetime
 import getopt
 import random
 import sys
@@ -126,6 +127,26 @@ class Boxes:
             raise(Exception(
                     "No place to place object of size %s." % object.size()))
 
+    def place_random(self, object):
+        possible = []
+        for ix in range(0, len(self._list)):
+            if self._list[ix].fits(object):
+                possible.append(ix)
+
+        if len(possible) == 0:
+            raise(Exception("No place to put object of size %s." %
+                            object.size()))
+        else:
+            # possible is a list of places where we can put this
+            # now pick one at random.
+            try:
+                p = random.randint(0, len(possible)-1)
+                b = self._list[possible[p]]
+                b.place(object)
+            except Exception as e:
+                print(str(e))
+                raise
+
 
 def run (bx, bl, algo, objectlist):
     boxes = Boxes()
@@ -144,6 +165,8 @@ def run (bx, bl, algo, objectlist):
                 boxes.place_fullest(o)
             elif algo == 1:
                 boxes.place_emptiest(o)
+            elif algo == 2:
+                boxes.place_random(o)
             else:
                 raise(Exception("Unknown algorithm"))
         except:
@@ -264,13 +287,18 @@ def main():
     # these integers is equal to boxes * boxsize.
     objectstream = makeobjectstream(niter, mi, mx, boxes, boxsize)
 
+    # we now reseed the random number generator with a non-deterministic
+    # seed
+    random.seed(datetime.now())
     for ix in range(1, niter):
         fullest = run(boxes, boxsize, 0, objectstream[ix])
         emptiest = run(boxes, boxsize, 1, objectstream[ix])
+        pr = run(boxes, boxsize, 2, objectstream[ix])
 
-        f.write("%s, %s, %s, %s, %s, %s, %s, %s, %s\n" % (
-                ix, fullest[0], fullest[1], fullest[2], fullest[3],
-                emptiest[0], emptiest[1], emptiest[2], emptiest[3]))
+        f.write("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n" % (
+            ix, fullest[0], fullest[1], fullest[2], fullest[3],
+            emptiest[0], emptiest[1], emptiest[2], emptiest[3],
+            pr[0], pr[1], pr[2], pr[3]))
 
     f.close()
 
