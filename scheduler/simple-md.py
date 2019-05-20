@@ -244,5 +244,9 @@ def main(niter, boxes, boxsize, mi, mx, output):
     f.close()
 
 if __name__ == "__main__":
-    main(1000, 100, [50, 50], [1, 1], [30, 30], 'simple-md.csv')
-    main(1000, 100, [50, 50000], [1, 1000], [30, 30000], 'simple-md-vsz.csv')
+    main(1000, 100, [50, 50], [1, 1], [30, 30],
+         'simple-md.csv')
+    main(1000, 100, [50, 50000], [1, 1000], [30, 30000],
+         'simple-md-vsz-scaled.csv')
+    main(1000, 100, [50, 50000], [1, 100], [30, 3000],
+         'simple-md-vsz-not-scaled.csv')
