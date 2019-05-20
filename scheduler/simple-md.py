@@ -219,13 +219,7 @@ def makeobjectstream(niter, mn, mx, boxes, boxsize):
     streamlist.sort(key=sortkeyfunc)
     return(streamlist)
 
-def main():
-    niter = 1000
-    boxes = 100
-    boxsize = [50, 50]
-    mi = [1, 1]
-    mx = [30, 30]
-    output = 'simple-md.csv'
+def main(niter, boxes, boxsize, mi, mx, output):
 
     f = open(output, 'w')
 
@@ -250,4 +244,5 @@ def main():
     f.close()
 
 if __name__ == "__main__":
-    main()
+    main(1000, 100, [50, 50], [1, 1], [30, 30], 'simple-md.csv')
+    main(1000, 100, [50, 50000], [1, 1000], [30, 30000], 'simple-md-vsz.csv')
