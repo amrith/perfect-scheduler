@@ -194,10 +194,6 @@ def usage():
     print("\t--max             Maximum object size (default: 30)")
 
 
-def sortkeyfunc(a):
-    return(len(a))
-
-
 def makeobjectstream(niter, mn, mx, boxes, boxsize):
     streamlist = []
     for ix in range(0, niter):
@@ -215,14 +211,12 @@ def makeobjectstream(niter, mn, mx, boxes, boxsize):
 
         streamlist.append(stream)
 
-    # we now sort streamlist based on the number of elements in each sub-list
-    streamlist.sort(key=sortkeyfunc)
     return(streamlist)
 
+def sortfunc(a):
+    return (a[1])
+
 def main(niter, boxes, boxsize, mi, mx, output):
-
-    f = open(output, 'w')
-
     # we now make the list of object streams. The object stream is a
     # list of integers in the range [min, max] such that the sum of
     # these integers is equal to boxes * boxsize.
@@ -231,15 +225,21 @@ def main(niter, boxes, boxsize, mi, mx, output):
     # we now reseed the random number generator with a non-deterministic
     # seed
     random.seed(datetime.now())
+    results = []
+
     for ix in range(1, niter):
         fullest = run(boxes, boxsize, 0, objectstream[ix])
         emptiest = run(boxes, boxsize, 1, objectstream[ix])
         pr = run(boxes, boxsize, 2, objectstream[ix])
+        results.append([ix, fullest[0], fullest[1], fullest[2], fullest[3],
+                        emptiest[0], emptiest[1], emptiest[2], emptiest[3],
+                        pr[0], pr[1], pr[2], pr[3]])
 
-        f.write("%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n" % (
-            ix, fullest[0], fullest[1], fullest[2], fullest[3],
-            emptiest[0], emptiest[1], emptiest[2], emptiest[3],
-            pr[0], pr[1], pr[2], pr[3]))
+    results.sort(key=sortfunc)
+    f = open(output, 'w')
+    for r in results:
+        f.write(', '.join([str(i) for i in r]))
+        f.write('\n')
 
     f.close()
 
