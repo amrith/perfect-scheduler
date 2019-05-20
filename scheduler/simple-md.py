@@ -213,8 +213,6 @@ def makeobjectstream(niter, mn, mx, boxes, boxsize):
 
     return(streamlist)
 
-def sortfunc(a):
-    return (a[1])
 
 def main(niter, boxes, boxsize, mi, mx, output):
     # we now make the list of object streams. The object stream is a
@@ -227,21 +225,23 @@ def main(niter, boxes, boxsize, mi, mx, output):
     random.seed(datetime.now())
     results = []
 
-    for ix in range(1, niter):
+    for ix in range(0, niter):
         fullest = run(boxes, boxsize, 0, objectstream[ix])
         emptiest = run(boxes, boxsize, 1, objectstream[ix])
         pr = run(boxes, boxsize, 2, objectstream[ix])
         results.append([ix, fullest[0], fullest[1], fullest[2], fullest[3],
                         emptiest[0], emptiest[1], emptiest[2], emptiest[3],
                         pr[0], pr[1], pr[2], pr[3]])
+        if ix % 100 == 0:
+            sys.stdout.write('.')
+            sys.stdout.flush()
 
-    results.sort(key=sortfunc)
+    sys.stdout.write('\n')
+    sys.stdout.flush()
+
     f = open(output, 'w')
-    ix = 0
     for r in results:
         # renumber the results
-        r[0] = ix
-        ix += 1
         f.write(', '.join([str(i) for i in r]))
         f.write('\n')
 
