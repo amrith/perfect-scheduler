@@ -224,8 +224,6 @@ def makeobjectstream(niter, mn, mx, boxes, boxsize):
 
     # we now sort streamlist based on the number of elements in each sub-list
     streamlist.sort(key=sortkeyfunc)
-
-    print ("Completed generation of object streams")
     return(streamlist)
 
 def main():
