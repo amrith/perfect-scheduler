@@ -237,7 +237,11 @@ def main(niter, boxes, boxsize, mi, mx, output):
 
     results.sort(key=sortfunc)
     f = open(output, 'w')
+    ix = 0
     for r in results:
+        # renumber the results
+        r[0] = ix
+        ix += 1
         f.write(', '.join([str(i) for i in r]))
         f.write('\n')
 
