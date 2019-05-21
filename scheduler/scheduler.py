@@ -288,7 +288,7 @@ def sortresults(a):
 def simulate(dimensions, boxsizes, output, objectstream):
     logging.warning("Running simulation.")
     results = []
-    iteration = 1
+    iteration = 0
     for objlist in objectstream:
         logging.info("Beginning iteration %(iteration)s.", {
             "iteration": iteration})
@@ -372,7 +372,11 @@ def run(iterations, dimensions, boxes, objsizes, output):
         while makemore(totalsize, listsize):
             objsize = []
             for iy in range(0, dimensions):
-                objdim = random.randint(objsizes[iy][0], objsizes[iy][1])
+                # objsizes must be a list of length 3, min, max and scale
+                assert(len(objsizes[iy]) == 3)
+                objdim = random.randint(objsizes[iy][0],
+                                        objsizes[iy][1])
+                objdim *= objsizes[iy][2]
                 objsize.append(objdim)
                 listsize[iy] += objdim
 
@@ -425,13 +429,15 @@ def main():
                         datefmt='%Y-%m-%d %H:%M:%S', level=ll)
 
     run(iterations, 1, [{"count": 50, "size": [50]}],
-        [[1, 30]], 'simulate-1d.csv')
+        [[1, 30, 1]], 'simulate-1d.csv')
     run(iterations, 2, [{"count": 50, "size": [50, 50]}],
-        [[1, 30], [1, 30]], 'simulate-2d.csv')
+        [[1, 30, 1], [1, 30, 1]], 'simulate-2d.csv')
     run(iterations, 3, [{"count": 50, "size": [50, 50, 50]}],
-        [[1, 30], [1, 30], [1, 30]], 'simulate-3d.csv')
+        [[1, 30, 1], [1, 30, 1], [1, 30, 1]], 'simulate-3d.csv')
     run(iterations, 2, [{"count": 50, "size": [50, 50000]}],
-        [[1, 30], [1000, 30000]], 'simulate-2-2d.csv')
+        [[1, 30, 1], [1, 30, 1000]], 'simulate-2-2d.csv')
+    run(iterations, 3, [{"count": 50, "size": [50, 50000, 5000]}],
+        [[1, 30, 1], [1, 30, 1000], [1, 30, 100]], 'simulate-2-3d.csv')
 
 
 if __name__ == "__main__":
