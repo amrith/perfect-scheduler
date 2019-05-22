@@ -6,6 +6,8 @@
 # a simple simulator for object placement simulation, and to help model
 # the behavior of Nova object placement.
 #
+# Amrith
+#
 
 import logging
 import random

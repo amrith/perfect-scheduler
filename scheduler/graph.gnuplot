@@ -1,3 +1,11 @@
+#
+# graph.gnuplot
+#
+# Graph the data from the simulation of box scheduling
+#
+# Amrith
+#
+
 set terminal jpeg small
 set output 'simulate-1d-count.jpeg'
 set xlabel 'iterations'
