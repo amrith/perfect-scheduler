@@ -468,12 +468,16 @@ def main():
         [[1, 30, 1], [1, 30, 1]], 'simulate-2d.csv')
     run(iterations, 3, [{"count": 50, "size": [50, 50, 50]}],
         [[1, 30, 1], [1, 30, 1], [1, 30, 1]], 'simulate-3d.csv')
-    run(iterations, 2, [{"count": 50, "size": [50, 50000]},
+    run(iterations, 1, [{"count": 30, "size": [50]},
+                        {"count": 10, "size": [20]},
+                        {"count": 10, "size": [100]}],
+        [[1, 30, 1]], 'simulate-1d-multisize.csv')
+    run(iterations, 2, [{"count": 30, "size": [50, 50000]},
                         {"count": 20, "size": [100, 20000]}],
-        [[1, 30, 1], [1, 30, 1000]], 'simulate-2-2d.csv')
-    run(iterations, 3, [{"count": 50, "size": [50, 50000, 5000]},
+        [[1, 30, 1], [1, 30, 1000]], 'simulate-2d-multisize.csv')
+    run(iterations, 3, [{"count": 30, "size": [50, 50000, 5000]},
                         {"count": 20, "size": [100, 20000, 2000]}],
-        [[1, 30, 1], [1, 30, 1000], [1, 30, 100]], 'simulate-2-3d.csv')
+        [[1, 30, 1], [1, 30, 1000], [1, 30, 100]], 'simulate-3d-multisize.csv')
 
 
 if __name__ == "__main__":

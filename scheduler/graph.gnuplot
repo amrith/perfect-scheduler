@@ -56,42 +56,61 @@ plot "simulate-3d.csv" u 1:3 w l title "fullest", \
      "simulate-3d.csv" u 1:7 w l title "random"
 
 set terminal jpeg small
-set output 'simulate-2-2d-count.jpeg'
+set output 'simulate-1d-multisize-count.jpeg'
+set xlabel 'iterations'
+set ylabel 'objects placed'
+set key right outside
+set title "Number of objects placed (1d simulation)"
+plot "simulate-1d-multisize.csv" u 1:2 w l title "fullest", \
+     "simulate-1d-multisize.csv" u 1:4 w l title "emptiest", \
+     "simulate-1d-multisize.csv" u 1:6 w l title "random"
+
+set output 'simulate-1d-multisize-avg-util.jpeg'
+set xlabel 'iterations'
+set ylabel 'average box utilization (%)'
+set key right outside
+set title "Average box utilization (1d simulation)"
+plot "simulate-1d-multisize.csv" u 1:3 w l title "fullest", \
+     "simulate-1d-multisize.csv" u 1:5 w l title "emptiest", \
+     "simulate-1d-multisize.csv" u 1:7 w l title "random"
+
+set terminal jpeg small
+set output 'simulate-2d-multisize-count.jpeg'
 set xlabel 'iterations'
 set ylabel 'objects placed'
 set key right outside
 set title "Number of objects placed (2d simulation)"
-plot "simulate-2-2d.csv" u 1:2 w l title "fullest", \
-     "simulate-2-2d.csv" u 1:4 w l title "emptiest", \
-     "simulate-2-2d.csv" u 1:6 w l title "random"
+plot "simulate-2d-multisize.csv" u 1:2 w l title "fullest", \
+     "simulate-2d-multisize.csv" u 1:4 w l title "emptiest", \
+     "simulate-2d-multisize.csv" u 1:6 w l title "random"
 
-set output 'simulate-2-2d-avg-util.jpeg'
+set output 'simulate-2d-multisize-avg-util.jpeg'
 set xlabel 'iterations'
 set ylabel 'average box utilization (%)'
 set key right outside
 set title "Average box utilization (2d simulation)"
-plot "simulate-2-2d.csv" u 1:3 w l title "fullest", \
-     "simulate-2-2d.csv" u 1:5 w l title "emptiest", \
-     "simulate-2-2d.csv" u 1:7 w l title "random"
+plot "simulate-2d-multisize.csv" u 1:3 w l title "fullest", \
+     "simulate-2d-multisize.csv" u 1:5 w l title "emptiest", \
+     "simulate-2d-multisize.csv" u 1:7 w l title "random"
 
 set terminal jpeg small
-set output 'simulate-2-3d-count.jpeg'
+set output 'simulate-3d-multisize-count.jpeg'
 set xlabel 'iterations'
 set ylabel 'objects placed'
 set key right outside
 set title "Number of objects placed (3d simulation)"
-plot "simulate-2-3d.csv" u 1:2 w l title "fullest", \
-     "simulate-2-3d.csv" u 1:4 w l title "emptiest", \
-     "simulate-2-3d.csv" u 1:6 w l title "random"
+plot "simulate-3d-multisize.csv" u 1:2 w l title "fullest", \
+     "simulate-3d-multisize.csv" u 1:4 w l title "emptiest", \
+     "simulate-3d-multisize.csv" u 1:6 w l title "random"
 
-set output 'simulate-2-3d-avg-util.jpeg'
+set output 'simulate-3d-multisize-avg-util.jpeg'
 set xlabel 'iterations'
 set ylabel 'average box utilization (%)'
 set key right outside
 set title "Average box utilization (3d simulation)"
-plot "simulate-2-3d.csv" u 1:3 w l title "fullest", \
-     "simulate-2-3d.csv" u 1:5 w l title "emptiest", \
-     "simulate-2-3d.csv" u 1:7 w l title "random"
+plot "simulate-3d-multisize.csv" u 1:3 w l title "fullest", \
+     "simulate-3d-multisize.csv" u 1:5 w l title "emptiest", \
+     "simulate-3d-multisize.csv" u 1:7 w l title "random"
 
 ##
 set style line 100 lt 1 lc rgb "gray" lw 0.5
@@ -164,3 +183,4 @@ set xrange [-1:6]
 set yrange [0:110]
 plot "simulate-3d-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
      with candlestic notitle lw 2
+
