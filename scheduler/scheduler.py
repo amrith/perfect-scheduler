@@ -116,9 +116,8 @@ class Box:
         return False
 
 class Boxes:
-    # algorithms = ['fullest', 'emptiest', 'random',
-    #               'first', 'smallest', 'largest']
-    algorithms = ['fullest', 'emptiest', 'random']
+    algorithms = ['fullest', 'emptiest', 'random',
+                  'first', 'smallest', 'largest']
 
     def __init__(self):
         self._boxlist = []
@@ -140,7 +139,7 @@ class Boxes:
         for b in self._boxlist:
             u.append(b.utilization())
 
-        return(round(100.0 * numpy.mean(u), 3))
+        return(round(100.0 * numpy.median(u), 3))
 
     def place(self, obj, algorithm):
         if algorithm not in self.algorithms:
@@ -289,6 +288,7 @@ def simulate(dimensions, boxsizes, output, objectstream):
     logging.warning("Running simulation.")
     results = []
     iteration = 0
+    test = output.replace('.csv', '')
     for objlist in objectstream:
         logging.info("Beginning iteration %(iteration)s.", {
             "iteration": iteration})
@@ -326,6 +326,43 @@ def simulate(dimensions, boxsizes, output, objectstream):
         of.write(', '.join([str(s) for s in r]) + '\n')
 
     of.close()
+
+    # results is a list of entries, each entry is a list that has an
+    # iteration number, and two values for each algorithm. Transpose
+    # and sort that data.
+    occupancy_summary = []
+    utilization_summary = []
+    ix = 1
+    for algorithm in Boxes.algorithms:
+        oc = [r[ix] for r in results]
+        sr = [algorithm]
+        sr.append(round(numpy.median(oc), 3))
+        sr.append(numpy.min(oc))
+        sr.append(numpy.max(oc))
+        sr.append(round(numpy.median(oc), 3))
+
+        occupancy_summary.append(sr)
+
+        ut = [r[ix+1] for r in results]
+        sr = [algorithm]
+        sr.append(round(numpy.median(ut), 3))
+        sr.append(numpy.min(ut))
+        sr.append(numpy.max(ut))
+        sr.append(round(numpy.median(ut), 3))
+        utilization_summary.append(sr)
+
+        ix += 2
+
+    sf = open(test + "-occupancy-summary.csv", 'w')
+    for sr in occupancy_summary:
+        sf.write(', '.join([str(s) for s in sr]) + '\n')
+
+    sf.close()
+    sf = open(test + "-utilization-summary.csv", 'w')
+    for sr in utilization_summary:
+        sf.write(', '.join([str(s) for s in sr]) + '\n')
+
+    sf.close()
     return
 
 def sortfunc(a):
@@ -394,7 +431,8 @@ def run(iterations, dimensions, boxes, objsizes, output):
     objectstream.sort(key=sortfunc)
 
     # now we have object streams, run the simulations
-    return(simulate(dimensions, boxes, output, objectstream))
+    simulate(dimensions, boxes, output, objectstream)
+    return
 
 def main():
     verbose = 0
