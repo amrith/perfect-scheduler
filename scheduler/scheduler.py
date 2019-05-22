@@ -139,7 +139,7 @@ class Boxes:
         for b in self._boxlist:
             u.append(b.utilization())
 
-        return(round(100.0 * numpy.median(u), 3))
+        return(round(100.0 * numpy.mean(u), 3))
 
     def place(self, obj, algorithm):
         if algorithm not in self.algorithms:
@@ -323,46 +323,39 @@ def simulate(dimensions, boxsizes, output, objectstream):
     logging.warning("Done with simulation.")
     of = open(output, 'w')
     for r in results:
-        of.write(', '.join([str(s) for s in r]) + '\n')
+        of.write(' '.join([str(s) for s in r]) + '\n')
 
     of.close()
 
     # results is a list of entries, each entry is a list that has an
     # iteration number, and two values for each algorithm. Transpose
     # and sort that data.
-    occupancy_summary = []
-    utilization_summary = []
+    summary = []
     ix = 1
     for algorithm in Boxes.algorithms:
         oc = [r[ix] for r in results]
         sr = [algorithm]
-        sr.append(round(numpy.median(oc), 3))
         sr.append(numpy.min(oc))
         sr.append(numpy.max(oc))
-        sr.append(round(numpy.median(oc), 3))
-
-        occupancy_summary.append(sr)
+        sr.append(round(numpy.mean(oc), 3))
+        sr.append(round(numpy.std(oc), 3))
 
         ut = [r[ix+1] for r in results]
-        sr = [algorithm]
-        sr.append(round(numpy.median(ut), 3))
         sr.append(numpy.min(ut))
         sr.append(numpy.max(ut))
-        sr.append(round(numpy.median(ut), 3))
-        utilization_summary.append(sr)
+        sr.append(round(numpy.mean(ut), 3))
+        sr.append(round(numpy.std(ut), 3))
+
+        summary.append(sr)
 
         ix += 2
 
-    sf = open(test + "-occupancy-summary.csv", 'w')
-    for sr in occupancy_summary:
-        sf.write(', '.join([str(s) for s in sr]) + '\n')
+    sf = open(test + "-summary.csv", 'w')
+    for sr in summary:
+        sf.write(' '.join([str(s) for s in sr]) + '\n')
 
     sf.close()
-    sf = open(test + "-utilization-summary.csv", 'w')
-    for sr in utilization_summary:
-        sf.write(', '.join([str(s) for s in sr]) + '\n')
 
-    sf.close()
     return
 
 def sortfunc(a):
@@ -466,15 +459,17 @@ def main():
     logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S', level=ll)
 
-    run(iterations, 1, [{"count": 50, "size": [50]}],
+    run(iterations, 1, [{"count": 100, "size": [50]}],
         [[1, 30, 1]], 'simulate-1d.csv')
-    run(iterations, 2, [{"count": 50, "size": [50, 50]}],
+    run(iterations, 2, [{"count": 100, "size": [50, 50]}],
         [[1, 30, 1], [1, 30, 1]], 'simulate-2d.csv')
-    run(iterations, 3, [{"count": 50, "size": [50, 50, 50]}],
+    run(iterations, 3, [{"count": 100, "size": [50, 50, 50]}],
         [[1, 30, 1], [1, 30, 1], [1, 30, 1]], 'simulate-3d.csv')
-    run(iterations, 2, [{"count": 50, "size": [50, 50000]}],
+    run(iterations, 2, [{"count": 100, "size": [50, 50000]},
+                        {"count": 20, "size": [100, 20000]}],
         [[1, 30, 1], [1, 30, 1000]], 'simulate-2-2d.csv')
-    run(iterations, 3, [{"count": 50, "size": [50, 50000, 5000]}],
+    run(iterations, 3, [{"count": 100, "size": [50, 50000, 5000]},
+                        {"count": 20, "size": [100, 20000, 2000]}],
         [[1, 30, 1], [1, 30, 1000], [1, 30, 100]], 'simulate-2-3d.csv')
 
 
