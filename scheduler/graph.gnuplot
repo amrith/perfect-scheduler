@@ -144,7 +144,7 @@ set ylabel 'utilization (%)'
 set key off
 set title "Box utilization (%) (1d simulation)"
 set xrange [-1:6]
-set yrange [0:110]
+set yrange [*:110]
 plot "simulate-1d-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
      with candlestic notitle lw 2
 
@@ -166,7 +166,7 @@ set ylabel 'utilization (%)'
 set key off
 set title "Box utilization (%) (2d simulation)"
 set xrange [-1:6]
-set yrange [0:110]
+set yrange [*:110]
 plot "simulate-2d-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
      with candlestic notitle lw 2
 
@@ -188,7 +188,7 @@ set ylabel 'utilization (%)'
 set key off
 set title "Box utilization (%) (3d simulation)"
 set xrange [-1:6]
-set yrange [0:110]
+set yrange [*:110]
 plot "simulate-3d-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
      with candlestic notitle lw 2
 
