@@ -469,16 +469,21 @@ def main():
     run(iterations, 3, [{"count": 50, "size": [50, 50, 50]}],
         [[1, 30, 1], [1, 30, 1], [1, 30, 1]], 'simulate-3d.csv')
     run(iterations, 1, [{"count": 20, "size": [50]},
-                        {"count": 30, "size": [20]},
-                        {"count": 10, "size": [100]}],
+                        {"count": 20, "size": [20]},
+                        {"count": 20, "size": [100]},
+                        {"count": 20, "size": [30]}],
         [[1, 30, 1]], 'simulate-1d-multisize.csv')
-    run(iterations, 2, [{"count": 20, "size": [75, 7500]},
-                        {"count": 30, "size": [150, 15000]},
-                        {"count": 10, "size": [100, 10000]}],
-        [[1, 30, 1], [1, 30, 1000]], 'simulate-2d-multisize.csv')
-    run(iterations, 3, [{"count": 30, "size": [50, 50000, 5000]},
-                        {"count": 20, "size": [100, 20000, 2000]}],
-        [[1, 30, 1], [1, 30, 1000], [1, 30, 100]], 'simulate-3d-multisize.csv')
+    run(iterations, 2, [{"count": 20, "size": [20, 20000]},
+                        {"count": 20, "size": [300, 30000]},
+                        {"count": 20, "size": [75, 7500]},
+                        {"count": 20, "size": [100, 10000]}],
+        [[1, 30, 1], [1, 30, 100]], 'simulate-2d-multisize.csv')
+    run(iterations, 3, [{"count": 20, "size": [150, 15000, 1500]},
+                        {"count": 20, "size": [50, 5000, 500]},
+                        {"count": 20, "size": [200, 20000, 2000]},
+                        {"count": 20, "size": [100, 10000, 1000]}],
+        [[1, 30, 1], [1, 30, 100], [1, 30, 10]],
+        'simulate-3d-multisize.csv')
 
 
 if __name__ == "__main__":
