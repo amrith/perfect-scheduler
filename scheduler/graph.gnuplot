@@ -126,6 +126,8 @@ set style line 101 lt 0.5 lc rgb "gray" lw 0.1
 set mytics 5
 set grid mytics ytics ls 100, ls 101
 
+set yrange [*:*]
+
 set terminal jpeg small
 set output 'simulate-1d-occupancy-summary.jpeg'
 set xlabel 'algorithm'
@@ -133,7 +135,6 @@ set ylabel 'occupancy'
 set key off
 set title "Number of objects placed (1d simulation)"
 set xrange [-1:6]
-set yrange [*:*]
 plot "simulate-1d-summary.csv" using (column(0)):4:2:3:4:xtic(1) \
      with candlestic notitle lw 2
 
@@ -144,7 +145,6 @@ set ylabel 'utilization (%)'
 set key off
 set title "Box utilization (%) (1d simulation)"
 set xrange [-1:6]
-set yrange [*:110]
 plot "simulate-1d-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
      with candlestic notitle lw 2
 
@@ -155,7 +155,6 @@ set ylabel 'occupancy'
 set key off
 set title "Number of objects placed (2d simulation)"
 set xrange [-1:6]
-set yrange [*:*]
 plot "simulate-2d-summary.csv" using (column(0)):4:2:3:4:xtic(1) \
      with candlestic notitle lw 2
 
@@ -166,7 +165,6 @@ set ylabel 'utilization (%)'
 set key off
 set title "Box utilization (%) (2d simulation)"
 set xrange [-1:6]
-set yrange [*:110]
 plot "simulate-2d-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
      with candlestic notitle lw 2
 
@@ -177,7 +175,6 @@ set ylabel 'occupancy'
 set key off
 set title "Number of objects placed (3d simulation)"
 set xrange [-1:6]
-set yrange [*:*]
 plot "simulate-3d-summary.csv" using (column(0)):4:2:3:4:xtic(1) \
      with candlestic notitle lw 2
 
@@ -188,7 +185,68 @@ set ylabel 'utilization (%)'
 set key off
 set title "Box utilization (%) (3d simulation)"
 set xrange [-1:6]
-set yrange [*:110]
 plot "simulate-3d-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
+     with candlestic notitle lw 2
+
+# --
+
+set terminal jpeg small
+set output 'simulate-1d-multisize-occupancy-summary.jpeg'
+set xlabel 'algorithm'
+set ylabel 'occupancy'
+set key off
+set title "Number of objects placed (1d simulation)"
+set xrange [-1:6]
+plot "simulate-1d-multisize-summary.csv" using (column(0)):4:2:3:4:xtic(1) \
+     with candlestic notitle lw 2
+
+set terminal jpeg small
+set output 'simulate-1d-multisize-utilization-summary.jpeg'
+set xlabel 'algorithm'
+set ylabel 'utilization (%)'
+set key off
+set title "Box utilization (%) (1d simulation)"
+set xrange [-1:6]
+plot "simulate-1d-multisize-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
+     with candlestic notitle lw 2
+
+set terminal jpeg small
+set output 'simulate-2d-multisize-occupancy-summary.jpeg'
+set xlabel 'algorithm'
+set ylabel 'occupancy'
+set key off
+set title "Number of objects placed (2d simulation)"
+set xrange [-1:6]
+plot "simulate-2d-multisize-summary.csv" using (column(0)):4:2:3:4:xtic(1) \
+     with candlestic notitle lw 2
+
+set terminal jpeg small
+set output 'simulate-2d-multisize-utilization-summary.jpeg'
+set xlabel 'algorithm'
+set ylabel 'utilization (%)'
+set key off
+set title "Box utilization (%) (2d simulation)"
+set xrange [-1:6]
+plot "simulate-2d-multisize-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
+     with candlestic notitle lw 2
+
+set terminal jpeg small
+set output 'simulate-3d-multisize-occupancy-summary.jpeg'
+set xlabel 'algorithm'
+set ylabel 'occupancy'
+set key off
+set title "Number of objects placed (3d simulation)"
+set xrange [-1:6]
+plot "simulate-3d-multisize-summary.csv" using (column(0)):4:2:3:4:xtic(1) \
+     with candlestic notitle lw 2
+
+set terminal jpeg small
+set output 'simulate-3d-multisize-utilization-summary.jpeg'
+set xlabel 'algorithm'
+set ylabel 'utilization (%)'
+set key off
+set title "Box utilization (%) (3d simulation)"
+set xrange [-1:6]
+plot "simulate-3d-multisize-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
      with candlestic notitle lw 2
 
