@@ -288,10 +288,13 @@ def simulate(dimensions, boxsizes, output, objectstream):
     logging.warning("Running simulation.")
     results = []
     iteration = 0
+    total = len(objectstream)
     test = output.replace('.csv', '')
     for objlist in objectstream:
-        logging.info("Beginning iteration %(iteration)s.", {
-            "iteration": iteration})
+        if iteration % 10 == 0:
+            logging.warning("Beginning iteration %(iteration)s of "
+                            "%(total)s.", {
+                                "iteration": iteration, "total": total})
         iteration += 1
         r = [iteration]
 
@@ -459,16 +462,16 @@ def main():
     logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S', level=ll)
 
-    run(iterations, 1, [{"count": 100, "size": [50]}],
+    run(iterations, 1, [{"count": 50, "size": [50]}],
         [[1, 30, 1]], 'simulate-1d.csv')
-    run(iterations, 2, [{"count": 100, "size": [50, 50]}],
+    run(iterations, 2, [{"count": 50, "size": [50, 50]}],
         [[1, 30, 1], [1, 30, 1]], 'simulate-2d.csv')
-    run(iterations, 3, [{"count": 100, "size": [50, 50, 50]}],
+    run(iterations, 3, [{"count": 50, "size": [50, 50, 50]}],
         [[1, 30, 1], [1, 30, 1], [1, 30, 1]], 'simulate-3d.csv')
-    run(iterations, 2, [{"count": 100, "size": [50, 50000]},
+    run(iterations, 2, [{"count": 50, "size": [50, 50000]},
                         {"count": 20, "size": [100, 20000]}],
         [[1, 30, 1], [1, 30, 1000]], 'simulate-2-2d.csv')
-    run(iterations, 3, [{"count": 100, "size": [50, 50000, 5000]},
+    run(iterations, 3, [{"count": 50, "size": [50, 50000, 5000]},
                         {"count": 20, "size": [100, 20000, 2000]}],
         [[1, 30, 1], [1, 30, 1000], [1, 30, 100]], 'simulate-2-3d.csv')
 
