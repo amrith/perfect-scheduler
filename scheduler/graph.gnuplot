@@ -63,6 +63,28 @@ plot "simulate-3d.csv" u 1:3 w l title "fullest", \
      "simulate-3d.csv" u 1:5 w l title "emptiest", \
      "simulate-3d.csv" u 1:7 w l title "random"
 
+##
+set terminal jpeg small
+set output 'simulate-3d-scaled-count.jpeg'
+set xlabel 'iterations'
+set ylabel 'objects placed'
+set key right outside
+set title "Number of objects placed (3d simulation - scaled)"
+plot "simulate-3d-scaled.csv" u 1:2 w l title "fullest", \
+     "simulate-3d-scaled.csv" u 1:4 w l title "emptiest", \
+     "simulate-3d-scaled.csv" u 1:6 w l title "random"
+
+set output 'simulate-3d-scaled-avg-util.jpeg'
+set xlabel 'iterations'
+set ylabel 'average box utilization (%)'
+set key right outside
+set title "Average box utilization (3d simumation - scaled)"
+plot "simulate-3d-scaled.csv" u 1:3 w l title "fullest", \
+     "simulate-3d-scaled.csv" u 1:5 w l title "emptiest", \
+     "simulate-3d-scaled.csv" u 1:7 w l title "random"
+
+##
+
 set terminal jpeg small
 set output 'simulate-1d-multisize-count.jpeg'
 set xlabel 'iterations'
@@ -250,3 +272,25 @@ set xrange [-1:6]
 plot "simulate-3d-multisize-summary.csv" using (column(0)):8:6:7:8:xtic(1) \
      with candlestic notitle lw 2
 
+
+set terminal jpeg small
+set output 'simulate-3d-scaled-multisize-occupancy-summary.jpeg'
+set xlabel 'algorithm'
+set ylabel 'occupancy'
+set key off
+set title "Number of objects placed (3d simulation - scaled)"
+set xrange [-1:6]
+plot "simulate-3d-scaled-multisize-summary.csv" \
+     using (column(0)):4:2:3:4:xtic(1) \
+     with candlestic notitle lw 2
+
+set terminal jpeg small
+set output 'simulate-3d-scaled-multisize-utilization-summary.jpeg'
+set xlabel 'algorithm'
+set ylabel 'utilization (%)'
+set key off
+set title "Box utilization (%) (3d simulation - scaled)"
+set xrange [-1:6]
+plot "simulate-3d-scaled-multisize-summary.csv" \
+     using (column(0)):8:6:7:8:xtic(1) \
+     with candlestic notitle lw 2

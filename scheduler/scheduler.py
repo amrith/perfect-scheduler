@@ -404,14 +404,25 @@ def run(iterations, dimensions, boxes, objsizes, output):
         # data set each time.
         random.seed(ix)
         objid = 1
+        xval = 0
         while makemore(totalsize, listsize):
             objsize = []
             for iy in range(0, dimensions):
-                # objsizes must be a list of length 3, min, max and scale
                 assert(len(objsizes[iy]) == 3)
-                objdim = random.randint(objsizes[iy][0],
-                                        objsizes[iy][1])
+                # objsizes must be a list of length 3, min, max and scale.
+                # if min and max are both 0, then scale is used to multiply
+                # the 0th dimension value
+                if not (iy != 0 and
+                        objsizes[iy][0] == 0 and
+                        objsizes[iy][1] == 0):
+                    objdim = random.randint(objsizes[iy][0],
+                                            objsizes[iy][1])
+                    xval = objdim
+                else:
+                    objdim = xval
+
                 objdim *= objsizes[iy][2]
+
                 objsize.append(objdim)
                 listsize[iy] += objdim
 
@@ -470,6 +481,8 @@ def main():
         [[1, 30, 1], [1, 30, 1]], 'simulate-2d.csv')
     run(iterations, 3, [{"count": 50, "size": [50, 50, 50]}],
         [[1, 30, 1], [1, 30, 1], [1, 30, 1]], 'simulate-3d.csv')
+    run(iterations, 3, [{"count": 50, "size": [50, 500, 5000]}],
+        [[1, 30, 1], [0, 0, 10], [0, 0, 100]], 'simulate-3d-scaled.csv')
     run(iterations, 1, [{"count": 20, "size": [50]},
                         {"count": 20, "size": [20]},
                         {"count": 20, "size": [100]},
@@ -486,6 +499,12 @@ def main():
                         {"count": 20, "size": [100, 10000, 1000]}],
         [[1, 30, 1], [1, 30, 100], [1, 30, 10]],
         'simulate-3d-multisize.csv')
+    run(iterations, 3, [{"count": 20, "size": [150, 15000, 1500]},
+                        {"count": 20, "size": [15, 1500, 150]},
+                        {"count": 20, "size": [30, 3000, 300]},
+                        {"count": 20, "size": [60, 6000, 600]}],
+        [[1, 30, 1], [0, 0, 100], [0, 0, 10]],
+        'simulate-3d-scaled-multisize.csv')
 
 
 if __name__ == "__main__":
